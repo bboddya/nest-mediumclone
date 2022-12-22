@@ -8,7 +8,6 @@ import { AuthUserDto } from './dto/authUser.dto';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UserResponseInterface } from './types/userResponse.interface';
 import { UserEntity } from './user.entity';
-import DataSource from '@app/data-source';
 @Injectable()
 export class UserService {
   constructor(
@@ -78,6 +77,7 @@ export class UserService {
         bio: true,
         image: true,
         password: true,
+        id: true,
       },
       where: {
         email: authUserDto.email,
@@ -96,6 +96,14 @@ export class UserService {
       );
     }
 
+    delete user.password;
+
     return user;
+  }
+
+  findById(id: number): Promise<UserEntity> {
+    return this.userRepository.findOneBy({
+      id,
+    });
   }
 }

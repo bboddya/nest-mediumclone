@@ -6,6 +6,7 @@ import { sign } from 'jsonwebtoken';
 import { Repository } from 'typeorm';
 import { AuthUserDto } from './dto/authUser.dto';
 import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
 import { UserResponseInterface } from './types/userResponse.interface';
 import { UserEntity } from './user.entity';
 @Injectable()
@@ -105,5 +106,14 @@ export class UserService {
     return this.userRepository.findOneBy({
       id,
     });
+  }
+
+  async updateUser(
+    userId: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    const user = await this.findById(userId);
+    Object.assign(user, updateUserDto['user']);
+    return await this.userRepository.save(user);
   }
 }
